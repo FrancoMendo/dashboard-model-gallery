@@ -141,3 +141,38 @@
   background: var(--accent-bg);
   color: var(--accent);
 }
+
+/* Recent productions table */
+.recent-thumb-cell {
+  width: 48px;
+  padding: 6px 8px 6px 14px !important;
+}
+
+.recent-thumb {
+  width: 44px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: var(--nav-hover);
+}
+
+.recent-thumb--loaded {
+  opacity: 1;
+}
+
+.recent-thumb--empty {
+  opacity: 1;
+  background: var(--nav-hover);
+}
+
+.recent-link {
+  color: var(--text-h);
+  text-decoration: none;
+}
+
+.recent-link:hover {
+  color: var(--accent);
+}

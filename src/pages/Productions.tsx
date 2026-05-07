@@ -9,8 +9,11 @@ interface Production {
   id: string
   title: string
   description: string | null
-  date: number | null
+  date: string | null
   location: string | null
+  type?: string
+  coverImage: string | null
+  photoCount: number
   createdAt: number
 }
 
@@ -19,13 +22,16 @@ interface NewProd {
   description: string
   date: string
   location: string
+  type: string
 }
 
-const EMPTY: NewProd = { title: '', description: '', date: '', location: '' }
+const EMPTY: NewProd = { title: '', description: '', date: '', location: '', type: 'General' }
 
 export default function Productions() {
-  const { user } = useAuth()
+  const { user, refreshStats } = useAuth()
   const [productions, setProductions] = useState<Production[]>([])
+
+  const uniqueTypes = Array.from(new Set(['General', ...productions.map(p => p.type).filter(Boolean)])) as string[]
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showForm, setShowForm] = useState(false)
@@ -53,6 +59,7 @@ export default function Productions() {
           description: form.description || undefined,
           date: form.date || undefined,
           location: form.location || undefined,
+          type: form.type || undefined,
         }),
       })
       if (!res.ok) throw new Error()
@@ -60,6 +67,7 @@ export default function Productions() {
       setProductions(p => [production, ...p])
       setForm(EMPTY)
       setShowForm(false)
+      refreshStats()
     } catch {
       setError('Failed to create production')
     } finally {
@@ -70,6 +78,7 @@ export default function Productions() {
   async function handleDelete(id: string) {
     await fetch(`${API}/productions/${id}`, { method: 'DELETE' })
     setProductions(p => p.filter(x => x.id !== id))
+    refreshStats()
   }
 
   return (
@@ -98,6 +107,20 @@ export default function Productions() {
                 value={form.location}
                 onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
               />
+            </div>
+            <div className="field">
+              <label>Type</label>
+              <input
+                list="type-options"
+                value={form.type}
+                onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
+                placeholder="Ej: General, Polaroid..."
+              />
+              <datalist id="type-options">
+                {uniqueTypes.map(t => (
+                  <option key={t} value={t} />
+                ))}
+              </datalist>
             </div>
             <div className="field">
               <label>Date</label>
@@ -135,32 +158,48 @@ export default function Productions() {
         <div className="prod-grid">
           {productions.map(p => (
             <div key={p.id} className="prod-card">
+              <Link className="prod-card-cover" to={`/productions/${p.id}`} tabIndex={-1}>
+                {p.coverImage ? (
+                  <img
+                    src={`${API}${p.coverImage}`}
+                    alt={p.title}
+                    loading="lazy"
+                    className="prod-card-img"
+                    onLoad={e => e.currentTarget.classList.add('prod-card-img--loaded')}
+                  />
+                ) : (
+                  <div className="prod-card-img-placeholder" />
+                )}
+                {p.photoCount > 0 && (
+                  <span className="prod-card-count">{p.photoCount}</span>
+                )}
+              </Link>
+
               <Link className="prod-card-body" to={`/productions/${p.id}`}>
                 <h3 className="prod-card-title">{p.title}</h3>
                 {p.location && <p className="prod-card-meta">📍 {p.location}</p>}
+                {p.type && <p className="prod-card-meta">📸 {p.type}</p>}
                 {p.date && (
                   <p className="prod-card-meta">
-                    {new Date(p.date * 1000).toLocaleDateString()}
+                    {new Date(p.date).toLocaleDateString()}
                   </p>
                 )}
                 {p.description && (
                   <p className="prod-card-desc">{p.description}</p>
                 )}
               </Link>
+
               <div className="prod-card-actions">
                 <Link className="btn-secondary" to={`/productions/${p.id}`}>
                   View images
                 </Link>
-                <Link
-                  className="btn-secondary"
-                  to={`/upload?productionId=${p.id}`}
-                >
+                <Link className="btn-secondary" to={`/productions/${p.id}/edit`}>
+                  Edit
+                </Link>
+                <Link className="btn-secondary" to={`/upload?productionId=${p.id}`}>
                   Upload
                 </Link>
-                <button
-                  className="btn-danger"
-                  onClick={() => handleDelete(p.id)}
-                >
+                <button className="btn-danger" onClick={() => handleDelete(p.id)}>
                   Delete
                 </button>
               </div>

@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import Productions from './pages/Productions'
 import ProductionDetail from './pages/ProductionDetail'
+import EditProduction from './pages/EditProduction'
 import Upload from './pages/Upload'
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
           >
             <Route index element={<Home />} />
             <Route path="productions" element={<Productions />} />
+            <Route path="productions/:id/edit" element={<EditProduction />} />
             <Route path="productions/:id" element={<ProductionDetail />} />
             <Route path="upload" element={<Upload />} />
           </Route>

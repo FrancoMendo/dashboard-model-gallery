@@ -6,7 +6,6 @@ const NAV_ITEMS = [
   { to: '/', label: 'Home', icon: '⊞' },
   { to: '/productions', label: 'Productions', icon: '◈' },
   { to: '/upload', label: 'Upload', icon: '⊡' },
-  { to: '/settings', label: 'Settings', icon: '⚙' },
 ]
 
 export default function Layout() {
