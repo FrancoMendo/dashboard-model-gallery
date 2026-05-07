@@ -38,8 +38,8 @@ export default function ProductionDetail() {
         fetch(`${API}/productions/${id}`),
         fetch(`${API}/productions/${id}/images`),
       ])
-      const { production: prod } = await prodRes.json<{ production: Production }>()
-      const { images: imgs } = await imgRes.json<{ images: ImageItem[] }>()
+      const { production: prod } = await prodRes.json() as { production: Production }
+      const { images: imgs } = await imgRes.json() as { images: ImageItem[] }
       setProduction(prod)
       setImages(
         [...imgs].sort(
@@ -62,7 +62,7 @@ export default function ProductionDetail() {
     if (swap < 0 || swap >= images.length) return
     setImages(imgs => {
       const next = [...imgs]
-      ;[next[idx], next[swap]] = [next[swap], next[idx]]
+        ;[next[idx], next[swap]] = [next[swap], next[idx]]
       return next
     })
     setOrderChanged(true)

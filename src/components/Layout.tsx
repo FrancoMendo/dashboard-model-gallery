@@ -38,8 +38,8 @@ export default function Layout() {
 
         <div className="sidebar-footer">
           <div className="user-info">
-            <div className="user-avatar">{user?.[0]?.toUpperCase()}</div>
-            <span className="user-email">{user}</span>
+            <div className="user-avatar">{user?.name?.[0]?.toUpperCase()}</div>
+            <span className="user-email">{user?.name}</span>
           </div>
           <button className="logout-btn" onClick={logout} title="Logout">
             ⏻

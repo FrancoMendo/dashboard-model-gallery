@@ -32,7 +32,7 @@ export default function Productions() {
 
   useEffect(() => {
     fetch(`${API}/productions`)
-      .then(r => r.json<{ productions: Production[] }>())
+      .then(r => r.json() as Promise<{ productions: Production[] }>)
       .then(d => setProductions(d.productions))
       .catch(() => setError('Failed to load productions'))
       .finally(() => setLoading(false))
@@ -54,7 +54,7 @@ export default function Productions() {
         }),
       })
       if (!res.ok) throw new Error()
-      const { production } = await res.json<{ production: Production }>()
+      const { production } = await res.json() as { production: Production }
       setProductions(p => [production, ...p])
       setForm(EMPTY)
       setShowForm(false)

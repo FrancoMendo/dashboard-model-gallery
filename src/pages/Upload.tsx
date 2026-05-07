@@ -28,7 +28,7 @@ export default function Upload() {
 
   useEffect(() => {
     fetch(`${API}/productions`)
-      .then(r => r.json<{ productions: Production[] }>())
+      .then(r => r.json() as any as { productions: Production[] })
       .then(d => setProductions(d.productions))
       .catch(() => setError('Failed to load productions'))
   }, [])
@@ -58,7 +58,7 @@ export default function Upload() {
       const next = [...q]
       const swap = idx + dir
       if (swap < 0 || swap >= next.length) return q
-      ;[next[idx], next[swap]] = [next[swap], next[idx]]
+        ;[next[idx], next[swap]] = [next[swap], next[idx]]
       return next.map((f, i) => ({ ...f, order: i + 1 }))
     })
   }
@@ -81,7 +81,7 @@ export default function Upload() {
       try {
         const res = await fetch(`${API}/images/upload`, { method: 'POST', body: fd })
         if (!res.ok) throw new Error()
-        const data = await res.json<{ key: string }>()
+        const data = await res.json() as any as { key: string }
         setQueue(q => q.map((f, j) => j === i ? { ...f, status: 'done', key: data.key } : f))
       } catch {
         setQueue(q => q.map((f, j) => j === i ? { ...f, status: 'error' } : f))
