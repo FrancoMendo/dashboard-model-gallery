@@ -14,18 +14,18 @@ export default function Login() {
 
   if (user) return <Navigate to="/" replace />
 
-  function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
     setLoading(true)
 
-    const ok = login(email, password)
+    const result = await login(email, password)
     setLoading(false)
 
-    if (ok) {
+    if (result.success) {
       navigate('/', { replace: true })
     } else {
-      setError('Invalid credentials. Password must be at least 4 characters.')
+      setError(result.error || 'Credenciales inválidas.')
     }
   }
 

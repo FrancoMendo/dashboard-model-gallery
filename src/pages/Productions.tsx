@@ -133,7 +133,7 @@ export default function Productions() {
         <div className="prod-grid">
           {productions.map(p => (
             <div key={p.id} className="prod-card">
-              <div className="prod-card-body">
+              <Link className="prod-card-body" to={`/productions/${p.id}`}>
                 <h3 className="prod-card-title">{p.title}</h3>
                 {p.location && <p className="prod-card-meta">📍 {p.location}</p>}
                 {p.date && (
@@ -144,13 +144,16 @@ export default function Productions() {
                 {p.description && (
                   <p className="prod-card-desc">{p.description}</p>
                 )}
-              </div>
+              </Link>
               <div className="prod-card-actions">
+                <Link className="btn-secondary" to={`/productions/${p.id}`}>
+                  View images
+                </Link>
                 <Link
                   className="btn-secondary"
                   to={`/upload?productionId=${p.id}`}
                 >
-                  Upload images
+                  Upload
                 </Link>
                 <button
                   className="btn-danger"
