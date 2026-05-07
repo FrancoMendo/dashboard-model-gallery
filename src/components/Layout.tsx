@@ -54,7 +54,6 @@ export default function Layout() {
             <span className="brand-name">ModelGallery</span>
           </div>
           <div className="topbar-actions">
-            <div className="user-avatar topbar-avatar">{user?.[0]?.toUpperCase() || "-"}</div>
             <button className="logout-btn" onClick={logout} title="Logout">⏻</button>
           </div>
         </header>
