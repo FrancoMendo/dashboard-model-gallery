@@ -18,7 +18,7 @@ export default function Home() {
       <div className="home-header">
         <div>
           <h2 className="home-heading">Welcome back</h2>
-          <p className="home-sub">{user}</p>
+          <p className="home-sub">{(user as any)?.name || "-"}</p>
         </div>
       </div>
 
