@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import './Productions.css'
 
 const API = import.meta.env.VITE_API_URL
@@ -23,6 +24,7 @@ interface NewProd {
 const EMPTY: NewProd = { title: '', description: '', date: '', location: '' }
 
 export default function Productions() {
+  const { user } = useAuth()
   const [productions, setProductions] = useState<Production[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -46,7 +48,7 @@ export default function Productions() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userId: 'temp-user',
+          userId: user?.id,
           title: form.title,
           description: form.description || undefined,
           date: form.date || undefined,
