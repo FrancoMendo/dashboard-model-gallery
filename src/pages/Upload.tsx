@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import imageCompression from 'browser-image-compression'
 import './Upload.css'
 
 const API = import.meta.env.VITE_API_URL
@@ -73,9 +74,14 @@ export default function Upload() {
       if (queue[i].status === 'done') continue
       setQueue(q => q.map((f, j) => j === i ? { ...f, status: 'uploading' } : f))
 
+      let file = queue[i].file
+      if (file.size > 1_000_000) {
+        file = await imageCompression(file, { maxSizeMB: 1, maxWidthOrHeight: 2560, useWebWorker: true })
+      }
+
       const fd = new FormData()
       fd.append('productionId', productionId)
-      fd.append('file', queue[i].file)
+      fd.append('file', file)
       fd.append('order', String(queue[i].order))
 
       try {
@@ -120,6 +126,7 @@ export default function Upload() {
       >
         <span className="drop-icon">⊡</span>
         <p>Drop images here or click to browse</p>
+        <p className="drop-hint">Images over 1 MB will be automatically compressed before upload</p>
         <input
           ref={inputRef}
           type="file"

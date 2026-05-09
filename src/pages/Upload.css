@@ -62,6 +62,12 @@
   opacity: 0.5;
 }
 
+.drop-hint {
+  font-size: 11px;
+  color: var(--text-muted, #888);
+  margin: 0;
+}
+
 /* Queue */
 .queue {
   display: flex;

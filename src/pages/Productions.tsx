@@ -85,64 +85,82 @@ export default function Productions() {
     <div className="productions">
       <div className="productions-header">
         <h2 className="productions-title">Productions</h2>
-        <button className="btn-primary" onClick={() => setShowForm(v => !v)}>
-          {showForm ? 'Cancel' : '+ New production'}
+        <button className="btn-primary" onClick={() => setShowForm(true)}>
+          + New production
         </button>
       </div>
 
       {showForm && (
-        <form className="prod-form" onSubmit={handleCreate}>
-          <div className="prod-form-grid">
-            <div className="field">
-              <label>Title *</label>
-              <input
-                required
-                value={form.title}
-                onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              />
+        <div className="modal-overlay" onClick={() => setShowForm(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Create New Production</h3>
+              <button className="modal-close" onClick={() => setShowForm(false)} aria-label="Close">
+                &times;
+              </button>
             </div>
-            <div className="field">
-              <label>Location</label>
-              <input
-                value={form.location}
-                onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
-              />
-            </div>
-            <div className="field">
-              <label>Type</label>
-              <input
-                list="type-options"
-                value={form.type}
-                onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
-                placeholder="Ej: General, Polaroid..."
-              />
-              <datalist id="type-options">
-                {uniqueTypes.map(t => (
-                  <option key={t} value={t} />
-                ))}
-              </datalist>
-            </div>
-            <div className="field">
-              <label>Date</label>
-              <input
-                type="date"
-                value={form.date}
-                onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-              />
-            </div>
-            <div className="field field--full">
-              <label>Description</label>
-              <textarea
-                value={form.description}
-                onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                rows={2}
-              />
-            </div>
+            <form className="prod-form" onSubmit={handleCreate}>
+              <div className="prod-form-grid">
+                <div className="field">
+                  <label>Title *</label>
+                  <input
+                    required
+                    value={form.title}
+                    onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                    placeholder="Enter production title"
+                  />
+                </div>
+                <div className="field">
+                  <label>Location</label>
+                  <input
+                    value={form.location}
+                    onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
+                    placeholder="E.g., Studio A, Paris..."
+                  />
+                </div>
+                <div className="field">
+                  <label>Type</label>
+                  <input
+                    list="type-options"
+                    value={form.type}
+                    onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
+                    placeholder="E.g., General, Polaroid..."
+                  />
+                  <datalist id="type-options">
+                    {uniqueTypes.map(t => (
+                      <option key={t} value={t} />
+                    ))}
+                  </datalist>
+                </div>
+                <div className="field">
+                  <label>Date</label>
+                  <input
+                    type="date"
+                    value={form.date}
+                    onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
+                  />
+                </div>
+                <div className="field field--full">
+                  <label>Description</label>
+                  <textarea
+                    value={form.description}
+                    onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+                    rows={3}
+                    placeholder="Add details or notes about this production..."
+                  />
+                </div>
+              </div>
+              <div className="modal-actions">
+                <button className="btn-secondary" type="button" onClick={() => setShowForm(false)}>
+                  Cancel
+                </button>
+                <button className="btn-primary" type="submit" disabled={saving}>
+                  {saving ? 'Saving…' : 'Create Production'}
+                </button>
+              </div>
+            </form>
           </div>
-          <button className="btn-primary" type="submit" disabled={saving}>
-            {saving ? 'Saving…' : 'Create'}
-          </button>
-        </form>
+        </div>
       )}
 
       {error && <p className="error-msg">{error}</p>}
