@@ -8,6 +8,7 @@ import Productions from './pages/Productions'
 import ProductionDetail from './pages/ProductionDetail'
 import EditProduction from './pages/EditProduction'
 import Upload from './pages/Upload'
+import EditProfile from './pages/EditProfile'
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="productions/:id/edit" element={<EditProduction />} />
             <Route path="productions/:id" element={<ProductionDetail />} />
             <Route path="upload" element={<Upload />} />
+            <Route path="profile" element={<EditProfile />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
